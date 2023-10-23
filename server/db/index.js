@@ -1,8 +1,9 @@
 const { Pool } = require("pg");
+require('dotenv').config();
 const db = new Pool({
   connectionString:
-    process.env.DATABASE_URL ||
-    "postgres://localhost:5432/34a-classroom_manager",
+    process.env.DATABASE_URL 
+   ,
 });
 
 async function query(sql, params, callback) {
