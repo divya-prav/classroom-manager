@@ -13,6 +13,10 @@ const authApi = api.injectEndpoints({
       query: () => "auth/me",
       providesTags: ["Me"],
     }),
+    loginViaGithub:builder.query({
+       query:()=>'auth/github/login',
+       providesTags: ["Me"],
+    }),
     login: builder.mutation({
       query: (credentials) => ({
         url: "auth/login",
@@ -29,6 +33,7 @@ const authApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Me"],
     }),
+   
     logout: builder.mutation({
       queryFn: () => ({ data: {} }),
       invalidatesTags: ["Me"],
@@ -67,6 +72,7 @@ export default authSlice.reducer;
 
 export const {
   useMeQuery,
+  useLoginViaGithubQuery,
   useLoginMutation,
   useRegisterMutation,
   useLogoutMutation,

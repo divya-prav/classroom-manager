@@ -7,6 +7,7 @@ import "./studentTable.css";
  */
 function StudentTable() {
   const { data: students, error, isLoading } = useGetStudentsQuery();
+  console.log(students);
   return (
     <section>
       <h2>Students</h2>

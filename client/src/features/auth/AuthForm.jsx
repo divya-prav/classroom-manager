@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLoginMutation, useRegisterMutation } from "./authSlice";
+import { useLoginMutation, useRegisterMutation , useLoginViaGithubQuery } from "./authSlice";
 
 /**
  * AuthForm allows a user to either login or register for an account.
@@ -7,6 +7,7 @@ import { useLoginMutation, useRegisterMutation } from "./authSlice";
 function AuthForm() {
   const [login] = useLoginMutation();
   const [register] = useRegisterMutation();
+ 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -64,7 +65,9 @@ function AuthForm() {
           />
         </label>
         <button type="submit">{authType}</button>
+      
       </form>
+      <a href="/auth/github/login"><button type="submit">Login via GitHub</button></a>
       <p>
         {oppositeAuthCopy}{" "}
         <a
