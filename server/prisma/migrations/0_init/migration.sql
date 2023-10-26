@@ -2,6 +2,7 @@
 CREATE TABLE "instructor" (
     "id" SERIAL NOT NULL,
     "username" TEXT NOT NULL,
+    "gitHub_username" TEXT ,
     "password" TEXT NOT NULL,
 
     CONSTRAINT "instructor_pkey" PRIMARY KEY ("id")

@@ -14,13 +14,14 @@ const axios = require("axios");
 // Register a new instructor account
 router.post("/register", async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { username, password,github_user } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 8);
     const instructor = await prisma.instructor.create({
       data: {
         username,
         password:hashedPassword,
+        
       },
     });
 
@@ -46,24 +47,52 @@ router.get("/account",async(req,res,next) =>{
 
 
   if(user){
-    const instructor = await prisma.instructor.create({
-    data:{
-      username:user.data.name,
-      password:"password"
-    }
+    try{
+      const instructor = await prisma.instructor.findUnique({
+        where:{
+          username:user.data.name
+        }
+      })
+      if(instructor){
+        const token = jwt.sign({ id: instructor.id }, process.env.JWT);
+        res.send(`
+        <h1>Successfully Logged In Via GitHub!!!</h1>
+        <p>${token}</p>
+        `)
+      }else{
+        next({
+          name:""
+        })
+      }
+
+    }catch{
+      const instructor = await prisma.instructor.create({
+        data:{
+          username: user.data.name,
+          password: "password",
+          github_user: accessToken
+        }
+          
+        })
+        if(instructor){
+          const token = jwt.sign({ id: instructor.id }, process.env.JWT);
+          res.send(`
+          <h1>Successfully Logged In Via GitHub!!!</h1>
+          <p>${token}</p>
+          `)
+        }else{
+          next({
+            name:""
+          })
+        }
       
-    })
-    if(instructor){
-      const token = jwt.sign({ id: instructor.id }, process.env.JWT);
-      res.send(`
-      <h1>Successfully Logged In Via GitHub!!!</h1>
-      <p>${token}</p>
-      `)
+
     }
+  
   }
 
  
-})
+}) 
 
 //GET auth/github/login
 router.get("/github/login", (req, res,next) => {
